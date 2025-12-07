@@ -1,0 +1,69 @@
+{
+	"version": "2.0.0",
+	"tasks": [
+		{
+			"label": "install_dependencies",
+			"type": "shell",
+			"command": "npm",
+			"args": [
+				"install",
+				"@supabase/supabase-js",
+				"@google/generative-ai",
+				"lucide-react",
+				"clsx",
+				"tailwind-merge",
+				"react-dropzone",
+				"framer-motion",
+				"ytdl-core",
+				"fluent-ffmpeg"
+			],
+			"isBackground": false,
+			"problemMatcher": [],
+			"group": "dependencies"
+		},
+		{
+			"label": "install_dependencies_retry",
+			"type": "shell",
+			"command": "npm",
+			"args": [
+				"install",
+				"@supabase/supabase-js",
+				"@google/generative-ai",
+				"lucide-react",
+				"clsx",
+				"tailwind-merge",
+				"react-dropzone",
+				"ytdl-core",
+				"fluent-ffmpeg",
+				"framer-motion"
+			],
+			"isBackground": false,
+			"problemMatcher": [],
+			"group": "dependencies"
+		},
+		{
+			"label": "uninstall_ytdl",
+			"type": "shell",
+			"command": "npm",
+			"args": [
+				"uninstall",
+				"ytdl-core"
+			],
+			"isBackground": false,
+			"problemMatcher": [],
+			"group": "dependencies"
+		},
+		{
+			"label": "install_distube_ytdl",
+			"type": "shell",
+			"command": "npm",
+			"args": [
+				"install",
+				"@distube/ytdl-core"
+			],
+			"isBackground": false,
+			"problemMatcher": [],
+			"group": "dependencies"
+		}
+	]
+}
