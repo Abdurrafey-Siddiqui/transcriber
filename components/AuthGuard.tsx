@@ -2,7 +2,6 @@
 
 import { useEffect, useState } from "react";
 import { useRouter } from "next/navigation";
-import { supabase } from "@/lib/supabase";
 import { Loader2 } from "lucide-react";
 
 export default function AuthGuard({ children }: { children: React.ReactNode }) {
@@ -11,29 +10,21 @@ export default function AuthGuard({ children }: { children: React.ReactNode }) {
 
   useEffect(() => {
     const checkAuth = async () => {
-      const {
-        data: { session },
-      } = await supabase.auth.getSession();
-      if (!session) {
+      try {
+        // Check if user is authenticated by calling a verify endpoint
+        const response = await fetch("/api/auth/verify");
+        
+        if (!response.ok) {
+          router.push("/login");
+        } else {
+          setLoading(false);
+        }
+      } catch (error) {
         router.push("/login");
-      } else {
-        setLoading(false);
       }
     };
 
-    const {
-      data: { subscription },
-    } = supabase.auth.onAuthStateChange((_event, session) => {
-      if (!session) {
-        router.push("/login");
-      } else {
-        setLoading(false);
-      }
-    });
-
     checkAuth();
-
-    return () => subscription.unsubscribe();
   }, [router]);
 
   if (loading) {

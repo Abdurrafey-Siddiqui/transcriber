@@ -6,6 +6,7 @@ import fs from "fs";
 import path from "path";
 import os from "os";
 import { pipeline } from "stream/promises";
+import { verifyToken } from "@/lib/auth";
 
 // Initialize Gemini
 const genAI = new GoogleGenerativeAI(process.env.GEMINI_API_KEY || "");
@@ -30,6 +31,25 @@ Platform.shim.eval = async (data, env) => {
 
 export async function POST(req: NextRequest) {
   try {
+    // Verify authentication
+    const token = req.cookies.get("auth-token")?.value;
+    
+    if (!token) {
+      return NextResponse.json(
+        { error: "Authentication required" },
+        { status: 401 }
+      );
+    }
+
+    const payload = await verifyToken(token);
+    
+    if (!payload) {
+      return NextResponse.json(
+        { error: "Invalid authentication token" },
+        { status: 401 }
+      );
+    }
+
     const contentType = req.headers.get("content-type") || "";
     let filePath = "";
     let mimeType = "";
