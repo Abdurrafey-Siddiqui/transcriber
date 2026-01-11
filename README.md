@@ -1,5 +1,42 @@
 This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
 
+## Environment Variables
+
+Create a `.env.local` file in the root directory with the following variables:
+
+```env
+# Gemini API Key for transcription
+GEMINI_API_KEY=your_gemini_api_key_here
+
+# Authentication credentials
+AUTH_USERNAME=your_email@example.com
+AUTH_PASSWORD_HASH=your_hashed_password_here
+JWT_SECRET=your_jwt_secret_key_here
+```
+
+### Generating AUTH_PASSWORD_HASH
+
+To generate the password hash, you can use Node.js:
+
+```javascript
+const crypto = require('crypto');
+const password = 'your_password';
+const hash = crypto.createHash('sha256').update(password).digest('hex');
+console.log(hash);
+```
+
+Or use this one-liner in your terminal:
+```bash
+node -e "console.log(require('crypto').createHash('sha256').update('your_password').digest('hex'))"
+```
+
+### JWT_SECRET
+
+Generate a secure random string for JWT_SECRET:
+```bash
+node -e "console.log(require('crypto').randomBytes(32).toString('hex'))"
+```
+
 ## Getting Started
 
 First, run the development server:

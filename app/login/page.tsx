@@ -1,7 +1,6 @@
 "use client";
 
 import { useState } from "react";
-import { supabase } from "@/lib/supabase";
 import { useRouter } from "next/navigation";
 import { Loader2 } from "lucide-react";
 
@@ -17,20 +16,27 @@ export default function LoginPage() {
     setLoading(true);
     setError(null);
 
-    // Convert username to email format for Supabase
-    const email = `${username}@transcriber.app`;
+    try {
+      const response = await fetch("/api/auth/login", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({ email: username, password }),
+      });
 
-    const { error } = await supabase.auth.signInWithPassword({
-      email,
-      password,
-    });
+      const data = await response.json();
 
-    if (error) {
-      setError(error.message);
+      if (!response.ok) {
+        setError(data.error || "Login failed");
+        setLoading(false);
+      } else {
+        router.push("/");
+        router.refresh();
+      }
+    } catch (err) {
+      setError("An error occurred during login");
       setLoading(false);
-    } else {
-      router.push("/");
-      router.refresh();
     }
   };
 
